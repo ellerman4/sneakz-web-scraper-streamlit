@@ -50,6 +50,7 @@ def draw_bar(df):
     tier5, tier6 = np.sum(df['Map Tier'] == 5), np.sum(df['Map Tier'] == 6)
     
     options = {
+    "tooltip": {"trigger": "item"},
     "legend": {"top": "0%", "left": "center"},
     "xAxis": {
         "type": "category",
