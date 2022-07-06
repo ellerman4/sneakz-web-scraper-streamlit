@@ -1,15 +1,12 @@
 
 import streamlit as st
 import pandas as pd
-from streamlit_player import st_player
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from bokeh.plotting import figure
-from streamlit_echarts import st_echarts
-#from scraper import pie
-st.title("Sneakz web scraper")
+from charts import draw_pie
 
-st.write("Enter your Steam ID here:")
+st.title("Sneakz web scraper")
+st.write("Results")
 
 with st.sidebar:
     text_input = st.text_input(label='Enter your Steam ID')
@@ -63,35 +60,8 @@ st.download_button(
     key='download-csv'
 )
 
-options = {
-    "tooltip": {"trigger": "item"},
-    "legend": {"top": "5%", "left": "center"},
-    "series": [
-        {
-            "name": "maps_left",
-            "type": "pie",
-            "radius": ["40%", "70%"],
-            "avoidLabelOverlap": False,
-            "itemStyle": {
-                "borderRadius": 10,
-                "borderColor": "#fff",
-                "borderWidth": 2,
-            },
-            "label": {"show": False, "position": "center"},
-            "emphasis": {
-                "label": {"show": True, "fontSize": "40", "fontWeight": "bold"}
-            },
-            "labelLine": {"show": False},
-            "data": [
-                {"value": df.shape[0], "name": "Maps Completed"},
-                {"value": (941 - df.shape[0]), "name": "Maps left"},
-            ],
-        }
-    ],
-}
-
 with chart_col:
-    st_echarts(options=options, height="500px",)
+    draw_pie(df)
 
 metcol1, metcol2 = st.columns(2)
 
