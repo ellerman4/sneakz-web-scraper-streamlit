@@ -74,7 +74,7 @@ def draw_line():
     option = {
     "xAxis": {
         "type": "category",
-        "data": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        "data": ["Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6"],
     },
     "yAxis": {"type": "value"},
     "series": [{"data": [820, 932, 901, 934, 1290, 1330, 1320], "type": "line"}],
