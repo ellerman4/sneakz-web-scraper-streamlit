@@ -3,9 +3,12 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie
+from charts import draw_pie, draw_table
 import Converter
+from st_aggrid import AgGrid
 
+st.set_page_config(layout="wide")
+# STEAM_1:1:56970041
 
 st.title("Sneakz web scraper")
 st.write("Results")
@@ -45,7 +48,7 @@ df = pd.DataFrame(result)
 table_col, chart_col = st.columns(2)
 
 with table_col:
-    st.dataframe(df, height = 405, width = 700)
+    draw_table(df)
 
 
 driver.close()
@@ -72,7 +75,7 @@ metcol1, metcol2 = st.columns(2)
 with metcol1:
     st.metric(label="Maps Completed", value=df.shape[0])
 
-maps_left = 944- df.shape[0]
+maps_left = 944 - df.shape[0]
 
 with metcol2:
     st.metric(label="Maps Unfinished", value=maps_left)

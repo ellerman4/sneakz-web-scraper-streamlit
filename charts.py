@@ -1,5 +1,6 @@
 
 from streamlit_echarts import st_echarts
+from st_aggrid import AgGrid, GridOptionsBuilder
 
 def draw_pie(df):
     options = {
@@ -23,7 +24,7 @@ def draw_pie(df):
                 "labelLine": {"show": False},
                 "data": [
                     {"value": df.shape[0], "name": "Maps Completed"},
-                    {"value": (944 - df.shape[0]), "name": "Total Maps"},
+                    {"value": (944 - df.shape[0]), "name": "Maps Left"},
                 ],
             }
         ],
@@ -31,3 +32,12 @@ def draw_pie(df):
     st_echarts(
         options=options, height="500px",
     )
+
+
+def draw_table(df):
+    custom_css = {
+    ".trade-buy-green": {"color": "green !important"},
+    ".trade-sell-red": {"color": "red !important"},
+    }
+
+    AgGrid(df, theme="streamlit", custom_css=custom_css)
