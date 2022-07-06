@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bokeh.plotting import figure
 from streamlit_echarts import st_echarts
-
+#from scraper import pie
 st.title("Sneakz web scraper")
 
 st.write("Enter your Steam ID here:")
@@ -41,7 +41,7 @@ for i in range(len(map_names)):
 
 #Create dataframe from the result list and build a table schema
 df = pd.DataFrame(result)
-table_col, chart_col = st.columns([4,1])
+table_col, chart_col = st.columns(2)
 
 with table_col:
     st.dataframe(df, height = 405, width = 700)
@@ -63,32 +63,35 @@ st.download_button(
     key='download-csv'
 )
 
-
-sectors = ["Maps Unfinished", "Maps Completed"]
-graph = figure(title = "Map Completion", width = 405, height = 405, margin = (5,0,0,0))
-map_count = df.shape[0] # Count the number of rows in the data table to get the number of maps completed
-maps = 944
-
-x = map_count
-y = maps
-
-radius = 1 # Set radius of the circle
-start_angle = [map_count, maps]
-end_angle = [maps, map_count]
-
-color = ['#525252', '#398aa4']
-
-for i in range(len(sectors)):
-    graph.wedge(x, y, radius,
-                start_angle = start_angle[i],
-                end_angle = end_angle[i],
-                color = color[i],
-                legend_label = sectors[i],
-                line_color="white",
-                )
+options = {
+    "tooltip": {"trigger": "item"},
+    "legend": {"top": "5%", "left": "center"},
+    "series": [
+        {
+            "name": "maps_left",
+            "type": "pie",
+            "radius": ["40%", "70%"],
+            "avoidLabelOverlap": False,
+            "itemStyle": {
+                "borderRadius": 10,
+                "borderColor": "#fff",
+                "borderWidth": 2,
+            },
+            "label": {"show": False, "position": "center"},
+            "emphasis": {
+                "label": {"show": True, "fontSize": "40", "fontWeight": "bold"}
+            },
+            "labelLine": {"show": False},
+            "data": [
+                {"value": df.shape[0], "name": "Maps Completed"},
+                {"value": (941 - df.shape[0]), "name": "Maps left"},
+            ],
+        }
+    ],
+}
 
 with chart_col:
-    st.bokeh_chart(graph, use_container_width=False)
+    st_echarts(options=options, height="500px",)
 
 metcol1, metcol2 = st.columns(2)
 
