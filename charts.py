@@ -58,13 +58,14 @@ def draw_bar(df):
     "yAxis": {"type": "value"},
     "series": [
         {"data": [
-            {"value": int(tier1), "itemStyle": {"color": "#b06161"}},
+            {"value": int(tier1), "itemStyle": {"color": "#b06161"}},   
             {"value": int(tier2), "itemStyle": {"color": "#b0ad61"}},
-            {"value": int(tier3), "itemStyle": {"color": "#8ab061"}},
+            {"value": int(tier3), "itemStyle": {"color": "#8ab061"}},   # Echarts cant read np64 integers, convert to regular int
             {"value": int(tier4), "itemStyle": {"color": "#61b094"}},
             {"value": int(tier5), "itemStyle": {"color": "#616ab0"}},
             {"value": int(tier6), "itemStyle": {"color": "#a561b0"}}
             ],
-            "type": "bar"}],  # Echarts cant understand np64 integers, convert to regular int
+                "type": "bar"}
+            ],  
     }
-    st_echarts(options=options, height="450px")
+    st_echarts(options=options, height="515px")
