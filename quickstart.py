@@ -77,12 +77,4 @@ st.download_button(
 with chart_col:
     draw_bar(df)
 
-metcol1, metcol2 = st.columns(2)
 
-with metcol1:
-    st.metric(label="Maps Completed", value=df.shape[0])
-
-maps_left = 944 - df.shape[0]
-
-with metcol2:
-    st.metric(label="Maps Unfinished", value=maps_left)
