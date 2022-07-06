@@ -63,10 +63,9 @@ def convert_df(df):
 
 csv = convert_df(df)
 with table_col:
-    st.download_button(
-        "Press to Download", csv, "file.csv", "text/csv", key='download-csv')
+    st.download_button("Press to Download", csv, "file.csv", "text/csv", key='download-csv')
     draw_table(df)
-    draw_line()
+    draw_line(df)
 
 with chart_col:
     draw_bar(df)
