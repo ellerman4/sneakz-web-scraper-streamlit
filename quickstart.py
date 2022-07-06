@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie, draw_table, draw_bar
+from charts import draw_pie, draw_table, draw_bar, draw_line
 import Converter
 from st_aggrid import AgGrid
 
@@ -67,6 +67,7 @@ with table_col:
     st.download_button(
         "Press to Download", csv, "file.csv", "text/csv", key='download-csv')
     draw_table(df)
+    draw_line()
 
 with chart_col:
     draw_bar(df)
