@@ -3,20 +3,24 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie, draw_table
+from charts import draw_pie, draw_table, draw_bar
 import Converter
 from st_aggrid import AgGrid
 
 st.set_page_config(layout="wide")
+
 # STEAM_1:1:56970041
 
 st.title("Sneakz web scraper")
-st.write("Results")
+st.write("Results will appear here...")
 
 with st.sidebar:
     text_input = st.text_input(label='Enter your Steam ID')
     submit_button = st.button(label='Scrape')
-    st.caption('Enter any form of steam id')
+    st.subheader('SteamID Examples:')
+    st.markdown('Legacy SteamID:    STEAM_1:1:56970041')
+    st.markdown('SteamID64:     76561198074205811')
+    st.markdown('SteamID3:      [U:1:113940083]')
 
 if not submit_button:
     st.stop()
@@ -43,13 +47,16 @@ for i in range(len(map_names)):
                 'Start Speed': start_speed[i].text}
     result.append(temp_data)
 
-#Create dataframe from the result list and build a table schema
+#Create dataframe from the result list
 df = pd.DataFrame(result)
+maps_df = pd.read_csv('maps.csv')
+
+df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier list
+
 table_col, chart_col = st.columns(2)
 
 with table_col:
     draw_table(df)
-
 
 driver.close()
 
@@ -68,7 +75,7 @@ st.download_button(
 )
 
 with chart_col:
-    draw_pie(df)
+    draw_bar(df)
 
 metcol1, metcol2 = st.columns(2)
 
