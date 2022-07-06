@@ -4,6 +4,8 @@ import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from charts import draw_pie
+import Converter
+
 
 st.title("Sneakz web scraper")
 st.write("Results")
@@ -11,12 +13,14 @@ st.write("Results")
 with st.sidebar:
     text_input = st.text_input(label='Enter your Steam ID')
     submit_button = st.button(label='Scrape')
+    st.caption('Enter any form of steam id')
 
 if not submit_button:
     st.stop()
 
 driver = webdriver.Chrome(executable_path='C:\Program Files (x86)\chromedriver')
-driver.get(f"https://snksrv.com/surfstats/?view=profile&id={text_input}")
+s_id = Converter.to_steamID(text_input)
+driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
 # Define each column in the third table via xpath
 map_names = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td/a')
