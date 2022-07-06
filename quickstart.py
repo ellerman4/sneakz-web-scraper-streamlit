@@ -48,6 +48,9 @@ for i in range(len(map_names)):
 
 #Create dataframe from the result list
 df = pd.DataFrame(result)
+
+df['Rank'] = pd.to_numeric(df['Rank'])
+
 maps_df = pd.read_csv('maps.csv')
 
 df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier list
