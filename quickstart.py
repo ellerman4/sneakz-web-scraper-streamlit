@@ -9,8 +9,6 @@ from streamlit_pandas_profiling import st_profile_report
 
 st.set_page_config(layout="wide")
 
-# STEAM_1:1:56970041
-
 # Build a sidebar for user input
 with st.sidebar:
     st.title("Sneakz web scraper")
@@ -87,8 +85,10 @@ st.markdown(f'Points:  {points} ⬆')
 
 st.markdown(f'Map Records:  {map_records} 🥇')
 
+# Create a column layout for plots
 table_col, chart_col = st.columns(2)
 
+# Convert dataframe to csv
 @st.cache
 def convert_df(df):
     return df.to_csv().encode('utf-8')
@@ -104,6 +104,10 @@ with chart_col:
     draw_bar(df)
     draw_pie(df)
 
+# Create a pandas profile report from dataframe, put in expander
 pr = df.profile_report()
+
 with st.expander("See Pandas Profile Report"):
-    st_profile_report(pr)
+    st_profile_report(pr, key='profile-report')
+    export=pr.to_html()
+    st.download_button(label="Download Full Report", data=export, file_name='report.html')
