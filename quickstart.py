@@ -14,7 +14,7 @@ st.title("Sneakz web scraper")
 st.write("Results will appear here...")
 
 with st.sidebar:
-    text_input = st.text_input(label='Enter your Steam ID')
+    text_input = st.text_input(label='Enter your Steam ID').strip()
     submit_button = st.button(label='Scrape')
     st.subheader('SteamID Examples:')
     st.markdown('Legacy SteamID: STEAM_1:1:56970041')
@@ -27,6 +27,8 @@ if not submit_button:
 driver = webdriver.Chrome(executable_path='C:\Program Files (x86)\chromedriver')
 s_id = Converter.to_steamID(text_input)
 driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
+
+player_name = driver.find_element(By.XPATH, '//h2/a').text  # Get player name
 
 # Define each column in the third table via xpath
 map_names = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td/a')
