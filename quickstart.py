@@ -18,9 +18,9 @@ with st.sidebar:
     text_input = st.text_input(label='Enter your Steam ID').strip()
     submit_button = st.button(label='Scrape')
     st.subheader('SteamID Examples:')
-    st.markdown('Legacy SteamID: STEAM_1:1:56970041')
-    st.markdown('SteamID64: 76561198074205811')
-    st.markdown('SteamID3: [U:1:113940083]')
+    st.markdown('Legacy SteamID: STEAM_1:1:171196293')
+    st.markdown('SteamID64: 76561198302658315')
+    st.markdown('SteamID3: [U:1:342392587]')
 
 if not submit_button:
     st.stop()
