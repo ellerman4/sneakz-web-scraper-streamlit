@@ -4,7 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from charts import draw_pie, draw_table, draw_bar, draw_line
 import Converter
-from st_aggrid import AgGrid
+import pandas_profiling
+from streamlit_pandas_profiling import st_profile_report
 
 st.set_page_config(layout="wide")
 
@@ -103,4 +104,6 @@ with chart_col:
     draw_bar(df)
     draw_pie(df)
 
-
+pr = df.profile_report()
+with st.expander("See Pandas Profile Report"):
+    st_profile_report(pr)
