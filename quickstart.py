@@ -24,6 +24,7 @@ with st.sidebar:
 if not submit_button:
     st.stop()
 
+# Get link, with provided SteamID
 driver = webdriver.Chrome(executable_path='chromedriver')
 s_id = Converter.to_steamID(text_input)
 driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
@@ -69,9 +70,8 @@ maps_df = pd.read_csv('maps.csv')       # Read maps.csv with map name and map ti
 df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier on Map Name column
 
 
-
-# Start building the actual web app
-st.title(player_name)
+# Start building the dashboard when scraping is complete
+st.title(f"{player_name}'s surf stats")
 
 if int(player_rank) <= 100:
     st.markdown(f"Rank:  {player_rank}  ⚡")
