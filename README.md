@@ -28,7 +28,8 @@ Note: Any form of steam id will work, as it is converted to a legacy steam id.
 
 The included chrome driver will open and start scraping, this can take up to a minute.
 
-![web-scraper-preview](https://user-images.githubusercontent.com/106990217/177654478-67fe69d3-16c9-4590-b44e-4acb144ece50.png)
+![web-scraper-prev](https://user-images.githubusercontent.com/106990217/177836535-e4f6d7ef-d899-419e-886d-babb3bdc19d6.png)
+
 
 Once the scraping process is done an interactive table will be generated with the option to export as a .csv file.
 
