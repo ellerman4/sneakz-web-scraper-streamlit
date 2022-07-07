@@ -24,41 +24,45 @@ with st.sidebar:
 if not submit_button:
     st.stop()
 
-# Get link, with provided SteamID
-driver = webdriver.Chrome(executable_path='chromedriver')
-s_id = Converter.to_steamID(text_input)
-driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
+with st.spinner('Retrieving Surf Stats...'):
+    # Get link, with provided SteamID
+    driver = webdriver.Chrome(executable_path='chromedriver')
+    s_id = Converter.to_steamID(text_input)
+    driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
-# Get general player data
-player_name = driver.find_element(By.XPATH, '//h2/a').text
-points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text.strip('Points: ')
-player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text.strip('Country: ')
-player_rank = driver.find_element(By.XPATH, '//b').text.strip('Rank: ')
+    # Get general player data
+    player_name = driver.find_element(By.XPATH, '//h2/a').text
+    points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text.strip('Points: ')
+    player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text.strip('Country: ')
+    player_rank = driver.find_element(By.XPATH, '//b').text.strip('Rank: ')
 
-# Get player record data
-map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text.strip('Map Records: ')
-bonus_records = driver.find_element(By.XPATH, '//tbody/tr[3]/td[2]').text.strip('Bonus Records: ')
-stage_records = driver.find_element(By.XPATH, '//tbody/tr[4]/td[2]').text.strip('Stage Records: ')
+    # Get player record data
+    map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text.strip('Map Records: ')
+    bonus_records = driver.find_element(By.XPATH, '//tbody/tr[3]/td[2]').text.strip('Bonus Records: ')
+    stage_records = driver.find_element(By.XPATH, '//tbody/tr[4]/td[2]').text.strip('Stage Records: ')
 
-# Get player map time data
-map_names = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td/a')
-rank = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[2]')
-pb = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[3]')
-date = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[4]')
-start_speed = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[5]')
+    # Get player completion data
+    map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text
 
-result = [] # Blank list to be appended later
+    # Get player map time data
+    map_names = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td/a')
+    rank = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[2]')
+    pb = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[3]')
+    date = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[4]')
+    start_speed = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[5]')
 
-# Iterate through all rows in the table, getting values for all rows
-for i in range(len(map_names)):
-    temp_data = {'Map Name': map_names[i].text,
-                'Rank': rank[i].text,
-                'Personal Best': pb[i].text,
-                'Date': date[i].text,
-                'Start Speed': start_speed[i].text}
-    result.append(temp_data)
+    result = [] # Blank list to be appended later
 
-driver.close()
+    # Iterate through all rows in the table, getting values for all rows
+    for i in range(len(map_names)):
+        temp_data = {'Map Name': map_names[i].text,
+                    'Rank': rank[i].text,
+                    'Personal Best': pb[i].text,
+                    'Date': date[i].text,
+                    'Start Speed': start_speed[i].text}
+        result.append(temp_data)
+
+    driver.close()
 
 #Create dataframe from the result list
 df = pd.DataFrame(result)
@@ -89,6 +93,7 @@ def convert_df(df):
     return df.to_csv().encode('utf-8')
 
 csv = convert_df(df)
+
 with table_col:
     st.download_button("Press to Download", csv, "file.csv", "text/csv", key='download-csv')
     draw_table(df)

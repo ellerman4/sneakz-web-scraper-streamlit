@@ -1,5 +1,5 @@
 
-from streamlit_echarts import st_echarts
+from streamlit_echarts import st_echarts, st_pyecharts
 from st_aggrid import AgGrid
 import numpy as np
 
