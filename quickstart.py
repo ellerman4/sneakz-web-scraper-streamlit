@@ -10,10 +10,11 @@ st.set_page_config(layout="wide")
 
 # STEAM_1:1:56970041
 
-st.title("Sneakz web scraper")
-st.write("Results will appear here...")
+#st.title("Sneakz web scraper")
+#st.write("Results will appear here...")
 
 with st.sidebar:
+    st.title("Sneakz web scraper")
     text_input = st.text_input(label='Enter your Steam ID').strip()
     submit_button = st.button(label='Scrape')
     st.subheader('SteamID Examples:')
@@ -28,9 +29,18 @@ driver = webdriver.Chrome(executable_path='C:\Program Files (x86)\chromedriver')
 s_id = Converter.to_steamID(text_input)
 driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
-player_name = driver.find_element(By.XPATH, '//h2/a').text  # Get player name
+# Get general player data
+player_name = driver.find_element(By.XPATH, '//h2/a').text
+points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text.strip('Points: ')
+player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text.strip('Country: ')
+player_rank = driver.find_element(By.XPATH, '//b').text.strip('Rank: ')
 
-# Define each column in the third table via xpath
+# Get player record data
+map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text.strip('Map Records: ')
+bonus_records = driver.find_element(By.XPATH, '//tbody/tr[3]/td[2]').text.strip('Bonus Records: ')
+stage_records = driver.find_element(By.XPATH, '//tbody/tr[4]/td[2]').text.strip('Stage Records: ')
+
+# Get player map time data
 map_names = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td/a')
 rank = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[2]')
 pb = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[3]')
@@ -48,6 +58,8 @@ for i in range(len(map_names)):
                 'Start Speed': start_speed[i].text}
     result.append(temp_data)
 
+driver.close()
+
 #Create dataframe from the result list
 df = pd.DataFrame(result)
 
@@ -57,10 +69,21 @@ maps_df = pd.read_csv('maps.csv')
 
 df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier list
 
+
+
+
+st.title(player_name)
+
+if int(player_rank) <= 100:
+    st.markdown(f"Rank:  {player_rank}  ⚡")
+else:
+    st.markdown(f"Rank:  {player_rank}")
+
+st.markdown(f'Points:  {points} ⬆')
+
+st.markdown(f'Map Records:  {map_records} 🥇')
+
 table_col, chart_col = st.columns(2)
-
-
-driver.close()
 
 @st.cache
 def convert_df(df):
