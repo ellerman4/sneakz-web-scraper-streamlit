@@ -10,9 +10,7 @@ st.set_page_config(layout="wide")
 
 # STEAM_1:1:56970041
 
-#st.title("Sneakz web scraper")
-#st.write("Results will appear here...")
-
+# Build a sidebar for user input
 with st.sidebar:
     st.title("Sneakz web scraper")
     text_input = st.text_input(label='Enter your Steam ID').strip()
@@ -22,10 +20,11 @@ with st.sidebar:
     st.markdown('SteamID64: 76561198302658315')
     st.markdown('SteamID3: [U:1:342392587]')
 
+# Stops the entire process until submit_button is clicked
 if not submit_button:
     st.stop()
 
-driver = webdriver.Chrome(executable_path='C:\Program Files (x86)\chromedriver')
+driver = webdriver.Chrome(executable_path='chromedriver')
 s_id = Converter.to_steamID(text_input)
 driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
@@ -63,15 +62,15 @@ driver.close()
 #Create dataframe from the result list
 df = pd.DataFrame(result)
 
-df['Rank'] = pd.to_numeric(df['Rank'])
+df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for accurate sorting/filtering
 
-maps_df = pd.read_csv('maps.csv')
+maps_df = pd.read_csv('maps.csv')       # Read maps.csv with map name and map tier data
 
-df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier list
-
-
+df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier on Map Name column
 
 
+
+# Start building the actual web app
 st.title(player_name)
 
 if int(player_rank) <= 100:
