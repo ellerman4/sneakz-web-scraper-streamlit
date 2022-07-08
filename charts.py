@@ -5,6 +5,8 @@ import numpy as np
 import pandas as pd
 from pyecharts.charts import Bar
 import pyecharts.options as opts
+import streamlit as st
+import base64
 def draw_pie(df):
     options = {
         "tooltip": {"trigger": "item"},
@@ -104,3 +106,45 @@ def players_bar():
         )
     )
     st_pyecharts(b, height=480)
+
+def draw_flag(player_name, player_country):
+    if player_country == 'The United States':
+        LOGO_IMAGE = "./assets/flags/us.png"
+    elif 'anada' in player_country:             # Not sure why Canada isnt read correctly
+        LOGO_IMAGE = "./assets/flags/ca.png"
+    elif player_country == 'The United Kingdom':
+        LOGO_IMAGE = "./assets/flags/gb.png"
+    else:
+        LOGO_IMAGE = "./assets/flags/us.png"
+    st.markdown(
+        """
+        <style>
+        .container {
+            display: flex;
+        }
+        .logo-text {
+            font-weight:700 !important;
+            font-size:50px !important;
+            color: #FAFAFA !important;
+            padding-top: 75px !important;
+            padding-right: 15px !important;
+        }
+        .logo-img {
+            float:right;
+            height: 29px !important;
+            margin-top: 100px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.markdown(
+        f"""
+        <div class="container">
+            <p class="logo-text">{player_name}'s surf stats</p>
+            <img class="logo-img" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )

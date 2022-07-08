@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie, draw_table, draw_bar, draw_line, players_bar
+from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar
 import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
@@ -70,15 +70,16 @@ with st.spinner('Retrieving Surf Stats...'):
 
 #Create dataframe from the result list
 df = pd.DataFrame(result)
-
 df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for accurate sorting/filtering
 
-maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/maps.csv')       # Read maps.csv with map name and map tier data
+# Read maps.csv with map name and map tier data
+maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/maps.csv')
 
-df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier on Map Name column, drop unnamed index column
+# Merge player stats with map tier on Map Name column, drop unnamed index column
+df = pd.merge(df, maps_df, on='Map Name')
 
 # Start building the dashboard when scraping is complete
-st.title(f"{player_name}'s surf stats")
+draw_flag(player_name, player_country)
 
 if int(player_rank) <= 100:
     st.markdown(f"Rank:  {player_rank}  ⚡")
