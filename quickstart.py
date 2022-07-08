@@ -73,14 +73,9 @@ df = pd.DataFrame(result)
 
 df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for accurate sorting/filtering
 
-# Create a profile report before merging data
-pr = df.profile_report()
-
 maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/maps.csv')       # Read maps.csv with map name and map tier data
 
-top_players = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/top_players.csv').drop(columns=['Unnamed: 0'])
-
-df = pd.merge(df, maps_df, on='Map Name').drop(columns=['Unnamed: 0'])   # Merge player stats with map tier on Map Name column, drop unnamed index column
+df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier on Map Name column, drop unnamed index column
 
 # Start building the dashboard when scraping is complete
 st.title(f"{player_name}'s surf stats")
@@ -123,6 +118,9 @@ with table_col:
 with chart_col:
     draw_bar(df)
     draw_pie(df)
+
+# Create a profile report
+pr = df.profile_report()
 
 # Create expander for pandas profile report
 with st.expander("See Pandas Profile Report"):
