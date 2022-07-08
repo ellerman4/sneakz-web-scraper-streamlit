@@ -42,14 +42,11 @@ with st.spinner('Retrieving Surf Stats...'):
     points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text.strip('Points: ')
     player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text.strip('Country: ')
     player_rank = driver.find_element(By.XPATH, '//b').text.strip('Rank: ')
-
+    
     # Get player record data
     map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text.strip('Map Records: ')
     bonus_records = driver.find_element(By.XPATH, '//tbody/tr[3]/td[2]').text.strip('Bonus Records: ')
     stage_records = driver.find_element(By.XPATH, '//tbody/tr[4]/td[2]').text.strip('Stage Records: ')
-
-    # Get player completion data
-    map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text
 
     # Get player map time data
     map_names = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td/a')
@@ -91,7 +88,17 @@ else:
 
 st.markdown(f'Points:  {points} ⬆')
 
-st.markdown(f'Map Records:  {map_records} 🥇')
+
+map_col, bonus_col, stage_col= st.columns(3)
+
+with map_col:
+    st.markdown(f'<div class="tooltip", style="cursor:pointer;", title="Map Records">🥇{map_records}</div>', unsafe_allow_html=True)
+
+with bonus_col:
+    st.markdown(f'<div class="tooltip", style="cursor:pointer; margin-left: -436px;", title="Bonus Records">🥈{bonus_records}</div>', unsafe_allow_html=True)
+
+with stage_col:
+    st.markdown(f'<div class="tooltip", style="cursor:pointer; margin-left: -864px;", title="Stage Records">🥉{stage_records}</div>', unsafe_allow_html=True)
 
 # Create a column layout for plots
 table_col, chart_col = st.columns(2)
