@@ -73,10 +73,9 @@ df = pd.DataFrame(result)
 
 df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for accurate sorting/filtering
 
-maps_df = pd.read_csv('maps.csv')       # Read maps.csv with map name and map tier data
+maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/maps.csv')       # Read maps.csv with map name and map tier data
 
-df = pd.merge(df, maps_df, on='Map Name')   # Merge player stats with map tier on Map Name column
-
+df = pd.merge(df, maps_df, on='Map Name').drop(columns=['Unnamed: 0'])   # Merge player stats with map tier on Map Name column, drop unnamed index column
 
 # Start building the dashboard when scraping is complete
 st.title(f"{player_name}'s surf stats")
@@ -88,9 +87,10 @@ else:
 
 st.markdown(f'Points:  {points} ⬆')
 
-
+# Create columns for records
 map_col, bonus_col, stage_col= st.columns(3)
 
+# Include tooltip info for records via inline html
 with map_col:
     st.markdown(f'<div class="tooltip", style="cursor:pointer;", title="Map Records">🥇{map_records}</div>', unsafe_allow_html=True)
 
