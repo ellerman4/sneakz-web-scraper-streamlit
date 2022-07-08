@@ -2,7 +2,9 @@
 from streamlit_echarts import st_echarts, st_pyecharts
 from st_aggrid import AgGrid
 import numpy as np
-
+import pandas as pd
+from pyecharts.charts import Bar
+import pyecharts.options as opts
 def draw_pie(df):
     options = {
         "tooltip": {"trigger": "item"},
@@ -85,3 +87,20 @@ def draw_line(df):
     "series": [{"data": [int(tier1), int(tier2), int(tier3), int(tier4), int(tier5), int(tier6)], "type": "line"}],
     }
     st_echarts(options=option, height="500px",)
+
+def players_bar():
+    top_players = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/top_players.csv').drop(columns=['Unnamed: 0'])
+    b = (
+        Bar()
+        .add_xaxis(top_players['Player Name'].tolist())
+        .add_yaxis('Points', top_players['Points'].tolist())
+        .set_global_opts(
+            title_opts=opts.TitleOpts(
+                title="Top 25 players by points", subtitle="Points"
+            ),
+            xaxis_opts=opts.AxisOpts(
+                axislabel_opts=opts.LabelOpts(rotate=-10)
+            ),
+        )
+    )
+    st_pyecharts(b, height=480)

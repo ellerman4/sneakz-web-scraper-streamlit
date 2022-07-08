@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie, draw_table, draw_bar, draw_line
+from charts import draw_pie, draw_table, draw_bar, draw_line, players_bar
 import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
@@ -73,7 +73,9 @@ df = pd.DataFrame(result)
 
 df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for accurate sorting/filtering
 
-maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/maps.csv')       # Read maps.csv with map name and map tier data
+maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/maps.csv')       # Read maps.csv with map name and map tier data
+
+top_players = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/top_players.csv').drop(columns=['Unnamed: 0'])
 
 df = pd.merge(df, maps_df, on='Map Name').drop(columns=['Unnamed: 0'])   # Merge player stats with map tier on Map Name column, drop unnamed index column
 
@@ -113,7 +115,7 @@ csv = convert_df(df)
 with table_col:
     st.download_button("Press to Download", csv, "file.csv", "text/csv", key='download-csv')
     draw_table(df)
-    draw_line(df)
+    players_bar()
 
 with chart_col:
     draw_bar(df)
