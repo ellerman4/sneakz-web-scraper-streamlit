@@ -7,6 +7,9 @@ import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
 
+# Create a runtime error if user enters an invalid SteamID
+invalid_id = RuntimeError('You may have entered an invalid SteamID')
+
 st.set_page_config(layout="wide")
 
 # Build a sidebar for user input
@@ -23,10 +26,15 @@ with st.sidebar:
 if not submit_button:
     st.stop()
 
+# Initialize streamlit spinner animation while scraping data
 with st.spinner('Retrieving Surf Stats...'):
-    # Get link, with provided SteamID
+    try:
+        s_id = Converter.to_steamID(text_input)
+    except:
+        st.exception(invalid_id)
+        st.stop()
+    
     driver = webdriver.Chrome(executable_path='chromedriver')
-    s_id = Converter.to_steamID(text_input)
     driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
     # Get general player data
