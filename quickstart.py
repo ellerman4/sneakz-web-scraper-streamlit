@@ -73,6 +73,9 @@ df = pd.DataFrame(result)
 
 df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for accurate sorting/filtering
 
+# Create a profile report before merging data
+pr = df.profile_report()
+
 maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/maps.csv')       # Read maps.csv with map name and map tier data
 
 top_players = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/top_players.csv').drop(columns=['Unnamed: 0'])
@@ -121,9 +124,7 @@ with chart_col:
     draw_bar(df)
     draw_pie(df)
 
-# Create a pandas profile report from dataframe, put in expander
-pr = df.profile_report()
-
+# Create expander for pandas profile report
 with st.expander("See Pandas Profile Report"):
     st_profile_report(pr, key='profile-report')
     export=pr.to_html()
