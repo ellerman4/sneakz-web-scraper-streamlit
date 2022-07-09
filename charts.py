@@ -7,10 +7,38 @@ from pyecharts.charts import Bar
 import pyecharts.options as opts
 import streamlit as st
 import base64
+
+
+ranks = {
+    'NEWBIE': 0,
+    'AMATEUR': 87,
+    'NOVICE': 604,
+    'APPRENTICE': 2154,
+    'CASUAL': 5170,
+    'REGULAR': 10340,
+    'ADVANCED': 21540,
+    'ADVANCED+': 38772,
+    'SEMI-ELITE': 58589,
+    'ELITE': 74960,
+    'VETERAN': 86160,
+    'SEMI-PRO': 107700,
+    'PRO': 137856,
+    'AMAZING': 189552,
+    'STUNNING': 215400,
+    'MASTER': 241248,
+    'WICKED': 267096,
+    'INSANE': 292944,
+    'RIDICULOUS': 323100,
+    'LEGEND': 353256,
+    'SURF GOD': 430800
+    }
+
+
 def draw_pie(df):
     options = {
         "tooltip": {"trigger": "item"},
-        "legend": {"top": "0%", "left": "center"},
+        "legend": {"top": "0%", "left": "center",
+                "textStyle": { "color": "white"}},
         "series": [
             {
                 "name": "maps_pie",
@@ -184,35 +212,21 @@ def draw_flag(player_name, player_country, s_id):
         unsafe_allow_html=True
     )
 
-def draw_rank(points):
-    ranks = {
-        'NEWBIE': 0,
-        'AMATEUR': 87,
-        'NOVICE': 604,
-        'APPRENTICE': 2154,
-        'CASUAL': 5170,
-        'REGULAR': 10340,
-        'ADVANCED': 21540,
-        'ADVANCED+': 38772,
-        'SEMI-ELITE': 58589,
-        'ELITE': 74960,
-        'VETERAN': 86160,
-        'SEMI-PRO': 107700,
-        'PRO': 137856,
-        'AMAZING': 189552,
-        'STUNNING': 215400,
-        'MASTER': 241248,
-        'WICKED': 267096,
-        'INSANE': 292944,
-        'RIDICULOUS': 323100,
-        'LEGEND': 353256,
-        'SURF GOD': 430800
-        }
 
-    # Loop through ranks until we find a value greater than player points
+# Loop through ranks until value greater than player points is found
+def draw_rank(points):
     for k,v in ranks.items():
         if v > int(points):
             next_rank = k
             next_rank_points = ranks[k]
             break
-    st.metric(label="Next Rank", value=next_rank, delta= abs(int(points) - next_rank_points))
+    st.metric(label="Next Rank", value=next_rank, delta = abs(int(points) - next_rank_points), delta_color="off")
+
+
+# Get players current rank
+def draw_current_rank(points):
+    # Get current rank
+    for k,v in ranks.items():
+        if v < int(points):
+            current_rank = k
+    st.metric(label="Current Rank", value=current_rank, delta=points)

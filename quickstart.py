@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank
+from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank, draw_current_rank
 import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
@@ -81,26 +81,29 @@ df = pd.merge(df, maps_df, on='Map Name')
 # Start building the dashboard when scraping is complete
 draw_flag(player_name, player_country, s_id)
 
+# 
 if int(player_rank) <= 100:
     st.markdown(f"Rank:  {player_rank}  ⚡")
 else:
     st.markdown(f"Rank:  {player_rank}")
-
-st.markdown(f'Points:  {points} ⬆')
 
 # Create columns for records
 map_col, bonus_col, stage_col= st.columns(3)
 
 # Include tooltip info for records via inline html
 with map_col:
-    st.markdown(f'<div class="tooltip", style="cursor:pointer;", title="Map Records">🥇{map_records}</div>', unsafe_allow_html=True)
-    #draw_rank(points)
+    draw_current_rank(points)
 
 with bonus_col:
-    st.markdown(f'<div class="tooltip", style="cursor:pointer; margin-left: -436px;", title="Bonus Records">🥈{bonus_records}</div>', unsafe_allow_html=True)
+    draw_rank(points)
 
 with stage_col:
-    st.markdown(f'<div class="tooltip", style="cursor:pointer; margin-left: -864px;", title="Stage Records">🥉{stage_records}</div>', unsafe_allow_html=True)
+    st.markdown(f'''<div class="tooltip",
+                    style="cursor:pointer;
+                            margin-left: -877px;
+                            margin-top: 71px;",
+                    title="Stage Records">🥇{map_records} 🥈{bonus_records} 🥉{stage_records}</div>''',
+                unsafe_allow_html=True)
 
 
 # Create a column layout for plots
