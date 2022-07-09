@@ -117,7 +117,7 @@ def draw_flag(player_name, player_country, s_id):
     else:
         LOGO_IMAGE = "./assets/flags/us.png"
     
-    # Some css hacking in a streamlit markdown
+    # Some css hacking with text animation
     st.markdown(
         """
         <style>
@@ -130,7 +130,35 @@ def draw_flag(player_name, player_country, s_id):
             color: #FAFAFA !important;
             padding-top: 75px !important;
             padding-right: 15px !important;
+            -webkit-animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both !important;
+            animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
         }
+        
+        @-webkit-keyframes tracking-in-expand {
+        0% {
+            letter-spacing: -0.5em;
+            opacity: 0;
+        }
+        40% {
+            opacity: 0.6;
+        }
+        100% {
+            opacity: 1;
+        }
+        }
+        @keyframes tracking-in-expand {
+        0% {
+            letter-spacing: -0.5em;
+            opacity: 0;
+        }
+        40% {
+            opacity: 0.6;
+        }
+        100% {
+            opacity: 1;
+            }
+        }
+
         .logo-img {
             float:right;
             height: 29px !important;
