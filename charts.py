@@ -107,15 +107,17 @@ def players_bar():
     )
     st_pyecharts(b, height=480)
 
-def draw_flag(player_name, player_country):
+def draw_flag(player_name, player_country, s_id):
     if player_country == 'The United States':
         LOGO_IMAGE = "./assets/flags/us.png"
-    elif 'anada' in player_country:             # Not sure why Canada isnt read correctly
+    elif 'anada' in player_country:             # Canada is scraped with a newline for some reason
         LOGO_IMAGE = "./assets/flags/ca.png"
     elif player_country == 'The United Kingdom':
         LOGO_IMAGE = "./assets/flags/gb.png"
     else:
         LOGO_IMAGE = "./assets/flags/us.png"
+    
+    # Some css hacking in a streamlit markdown
     st.markdown(
         """
         <style>
@@ -134,6 +136,9 @@ def draw_flag(player_name, player_country):
             height: 29px !important;
             margin-top: 100px;
         }
+        .css-13sdm1b a {
+            color: rgb(191 109 109);
+        }
         </style>
         """,
         unsafe_allow_html=True
@@ -142,9 +147,44 @@ def draw_flag(player_name, player_country):
     st.markdown(
         f"""
         <div class="container">
-            <p class="logo-text">{player_name}'s surf stats</p>
-            <img class="logo-img" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
+            <p class="logo-text">
+                <a href="https://snksrv.com/surfstats/?view=profile&id={s_id}">{player_name}</a>'s surf stats
+            </p>
+            <img class="logo-img" title="Country" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
         </div>
         """,
         unsafe_allow_html=True
     )
+
+def draw_rank(points):
+    ranks = {
+        'NEWBIE': 0,
+        'AMATEUR': 87,
+        'NOVICE': 604,
+        'APPRENTICE': 2154,
+        'CASUAL': 5170,
+        'REGULAR': 10340,
+        'ADVANCED': 21540,
+        'ADVANCED+': 38772,
+        'SEMI-ELITE': 58589,
+        'ELITE': 74960,
+        'VETERAN': 86160,
+        'SEMI-PRO': 107700,
+        'PRO': 137856,
+        'AMAZING': 189552,
+        'STUNNING': 215400,
+        'MASTER': 241248,
+        'WICKED': 267096,
+        'INSANE': 292944,
+        'RIDICULOUS': 323100,
+        'LEGEND': 353256,
+        'SURF GOD': 430800
+        }
+
+    # Loop through ranks until we find a value greater than player points
+    for k,v in ranks.items():
+        if v > int(points):
+            next_rank = k
+            next_rank_points = ranks[k]
+            break
+    st.metric(label="Next Rank", value=next_rank, delta= abs(int(points) - next_rank_points))

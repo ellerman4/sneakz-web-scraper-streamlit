@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar
+from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank
 import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
@@ -42,7 +42,7 @@ with st.spinner('Retrieving Surf Stats...'):
     points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text.strip('Points: ')
     player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text.strip('Country: ')
     player_rank = driver.find_element(By.XPATH, '//b').text.strip('Rank: ')
-    
+
     # Get player record data
     map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text.strip('Map Records: ')
     bonus_records = driver.find_element(By.XPATH, '//tbody/tr[3]/td[2]').text.strip('Bonus Records: ')
@@ -79,7 +79,7 @@ maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper
 df = pd.merge(df, maps_df, on='Map Name')
 
 # Start building the dashboard when scraping is complete
-draw_flag(player_name, player_country)
+draw_flag(player_name, player_country, s_id)
 
 if int(player_rank) <= 100:
     st.markdown(f"Rank:  {player_rank}  ⚡")
@@ -94,12 +94,14 @@ map_col, bonus_col, stage_col= st.columns(3)
 # Include tooltip info for records via inline html
 with map_col:
     st.markdown(f'<div class="tooltip", style="cursor:pointer;", title="Map Records">🥇{map_records}</div>', unsafe_allow_html=True)
+    #draw_rank(points)
 
 with bonus_col:
     st.markdown(f'<div class="tooltip", style="cursor:pointer; margin-left: -436px;", title="Bonus Records">🥈{bonus_records}</div>', unsafe_allow_html=True)
 
 with stage_col:
     st.markdown(f'<div class="tooltip", style="cursor:pointer; margin-left: -864px;", title="Stage Records">🥉{stage_records}</div>', unsafe_allow_html=True)
+
 
 # Create a column layout for plots
 table_col, chart_col = st.columns(2)
