@@ -1,5 +1,19 @@
 import streamlit as st
 
+def download_button_css():
+    st.markdown(
+    """
+    <style>
+    .css-1q8dd3e {
+        width: 151px;
+        position: absolute;
+        top: 423px;
+        left: 551px;
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+
 def button_css():
     st.markdown(
     """
