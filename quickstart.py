@@ -6,14 +6,34 @@ from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_
 import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
-from css.custom_css import button_css, card
+from css.custom_css import button_css, download_button_css
 
 # Create a runtime error if user enters an invalid SteamID
 invalid_id = RuntimeError('You may have entered an invalid SteamID')
 
 st.set_page_config(layout="wide")
 
+download_button_css()
 button_css()
+
+
+# Fix padding
+st.markdown('''
+    <style>
+    .css-18e3th9 {
+        padding: 0rem 1rem 10rem;
+        flex: 1 1 0%;
+        width: 100%;
+        padding-left: 5rem;
+        padding-right: 5rem;
+        min-width: auto;
+        max-width: initial;
+    }
+    </style>''',
+    unsafe_allow_html=True
+    )
+
+
 # Build a sidebar for user input
 with st.sidebar:
     #card()
