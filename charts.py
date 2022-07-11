@@ -220,6 +220,9 @@ def draw_rank(points):
             next_rank = k
             next_rank_points = ranks[k]
             break
+        else:
+            next_rank = 'NONE'
+            next_rank_points = 0
     st.metric(label="Next Rank", value=next_rank, delta = abs(int(points) - next_rank_points), delta_color="off")
 
 
