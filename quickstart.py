@@ -76,14 +76,14 @@ with st.spinner('Retrieving Surf Stats...'):
 
     # Get general player data
     player_name = driver.find_element(By.XPATH, '//h2/a').text
-    points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text.strip('Points: ')
-    player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text.strip('Country: ')
-    player_rank = driver.find_element(By.XPATH, '//b').text.strip('Rank: ')
+    points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text[8:]
+    player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text[9:]
+    player_rank = driver.find_element(By.XPATH, '//b').text[6:]
 
     # Get player record data
-    map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text.strip('Map Records: ')
-    bonus_records = driver.find_element(By.XPATH, '//tbody/tr[3]/td[2]').text.strip('Bonus Records: ')
-    stage_records = driver.find_element(By.XPATH, '//tbody/tr[4]/td[2]').text.strip('Stage Records: ')
+    map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text[13:]
+    bonus_records = driver.find_element(By.XPATH, '//tbody/tr[3]/td[2]').text[15:]
+    stage_records = driver.find_element(By.XPATH, '//tbody/tr[4]/td[2]').text[15:]
 
     # Get player map time data
     map_names = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td/a')
