@@ -131,11 +131,16 @@ countries = {
 }
 
 
+# Custom css for player name and country flag
 def draw_flag(player_name, player_country, id64):
+
+    # Loop through countries until a match is found
     for k,v in countries.items():
         if k in player_country:
             flag = f"./assets/flags/{v}.png"
-    
+        else:
+            flag = "./assets/flags/us.png"
+
     # Some css hacking with text animation
     st.markdown(
         """
