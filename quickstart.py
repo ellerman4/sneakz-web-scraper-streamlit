@@ -8,6 +8,7 @@ import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
 from css.custom_css import button_css, download_button_css
 import psycopg2
+from datetime import datetime
 
 # Create a runtime error if user enters an invalid SteamID
 invalid_id = RuntimeError('You may have entered an invalid SteamID')
@@ -103,10 +104,15 @@ with st.spinner('Retrieving Surf Stats...'):
 
     driver.close()
 
-
+# Delete row by steamid if exists
 cur.execute("DELETE FROM player_stats WHERE steamid = %s",(s_id,))
-cur.execute("""INSERT INTO player_stats(name, steamid, points, map_records) VALUES (%s, %s, %s, %s)""",(player_name, s_id, points, map_records))
 
+# Insert player stats into database
+cur.execute("""INSERT INTO player_stats(name, steamid, points, map_records, date, rank, country)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+                (player_name, s_id, points, map_records, datetime.today(), player_rank, player_country))
+
+# Commit database changes
 conn.commit()
 
 
@@ -117,13 +123,13 @@ df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for acc
 # Read maps.csv with map name and map tier data
 maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/maps.csv')
 
-# Merge player stats with map tier on Map Name column, drop unnamed index column
+# Merge player stats with map tier on Map Name column
 df = pd.merge(df, maps_df, on='Map Name')
 
 # Start building the dashboard when scraping is complete
 draw_flag(player_name, player_country, s_id)
 
-# 
+
 if int(player_rank) <= 100:
     st.markdown(f"Rank:  {player_rank}  ⚡")
 else:
