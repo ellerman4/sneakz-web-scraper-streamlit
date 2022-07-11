@@ -7,12 +7,24 @@ import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
 from css.custom_css import button_css, download_button_css
+import psycopg2
 
 # Create a runtime error if user enters an invalid SteamID
 invalid_id = RuntimeError('You may have entered an invalid SteamID')
 
 st.set_page_config(layout="wide")
 
+
+# Initialize connection to database
+@st.experimental_singleton
+def init_connection():
+    return psycopg2.connect(**st.secrets["postgres"])
+
+# Create a cursor to interact with the database
+conn = init_connection()
+cur = conn.cursor()
+
+# Load some custom css
 download_button_css()
 button_css()
 
@@ -90,6 +102,13 @@ with st.spinner('Retrieving Surf Stats...'):
         result.append(temp_data)
 
     driver.close()
+
+
+cur.execute("DELETE FROM player_stats WHERE steamid = %s",(s_id,))
+cur.execute("""INSERT INTO player_stats(name, steamid, points, map_records) VALUES (%s, %s, %s, %s)""",(player_name, s_id, points, map_records))
+
+conn.commit()
+
 
 #Create dataframe from the result list
 df = pd.DataFrame(result)
