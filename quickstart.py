@@ -9,6 +9,7 @@ from streamlit_pandas_profiling import st_profile_report
 from css.custom_css import button_css, download_button_css
 import psycopg2
 from datetime import datetime
+import timeit
 
 # Create a runtime error if user enters an invalid SteamID
 invalid_id = RuntimeError('You may have entered an invalid SteamID')
@@ -62,6 +63,9 @@ with st.sidebar:
 if not submit_button:
     st.stop()
 
+# Start a timer to log scrape time
+start = timeit.default_timer()
+
 # Initialize streamlit spinner animation while scraping data
 with st.spinner('Retrieving Surf Stats...'):
     try:
@@ -105,6 +109,11 @@ with st.spinner('Retrieving Surf Stats...'):
 
     driver.close()
 
+# Stop the timer and calculate execution time
+stop = timeit.default_timer()
+execution_time = stop - start
+
+
 # Delete row by steamid if exists
 cur.execute("DELETE FROM player_stats WHERE steamid = %s",(s_id,))
 
@@ -126,6 +135,7 @@ maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper
 
 # Merge player stats with map tier on Map Name column
 df = pd.merge(df, maps_df, on='Map Name')
+
 
 # Start building the dashboard when scraping is complete
 draw_flag(player_name, player_country, id64)
@@ -182,3 +192,6 @@ with st.expander("See Pandas Profile Report"):
     st_profile_report(pr, key='profile-report')
     export=pr.to_html()
     st.download_button(label="Download Full Report", data=export, file_name='report.html')
+
+# Write execution time
+st.write(execution_time)
