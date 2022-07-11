@@ -10,6 +10,7 @@ from css.custom_css import button_css, download_button_css
 import psycopg2
 from datetime import datetime
 import timeit
+from selenium.webdriver.chrome.options import Options
 
 # Create a runtime error if user enters an invalid SteamID
 invalid_id = RuntimeError('You may have entered an invalid SteamID')
@@ -66,6 +67,15 @@ if not submit_button:
 # Start a timer to log scrape time
 start = timeit.default_timer()
 
+# Chromedriver options for faster scraping
+options = Options()
+options.headless = True
+options.add_argument("--disable-extensions")
+options.add_argument('disable-infobars')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-gpu')
+
+
 # Initialize streamlit spinner animation while scraping data
 with st.spinner('Retrieving Surf Stats...'):
     try:
@@ -75,7 +85,7 @@ with st.spinner('Retrieving Surf Stats...'):
         st.exception(invalid_id)
         st.stop()
     
-    driver = webdriver.Chrome(executable_path='chromedriver')
+    driver = webdriver.Chrome(options=options, executable_path='chromedriver')
     driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
     # Get general player data
