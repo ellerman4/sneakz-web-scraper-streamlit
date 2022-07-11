@@ -135,7 +135,7 @@ def players_bar():
     )
     st_pyecharts(b, height=480)
 
-def draw_flag(player_name, player_country, s_id):
+def draw_flag(player_name, player_country, id64):
     if player_country == 'The United States':
         LOGO_IMAGE = "./assets/flags/us.png"
     elif 'anada' in player_country:             # Canada is scraped with a newline for some reason
@@ -204,7 +204,7 @@ def draw_flag(player_name, player_country, s_id):
         f"""
         <div class="container">
             <p class="logo-text">
-                <a href="https://snksrv.com/surfstats/?view=profile&id={s_id}">{player_name}</a>'s surf stats
+                <a href="http://steamcommunity.com/profiles/{id64}">{player_name}</a>'s surf stats
             </p>
             <img class="logo-img" title="Country" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
         </div>

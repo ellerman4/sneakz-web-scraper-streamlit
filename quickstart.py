@@ -66,6 +66,7 @@ if not submit_button:
 with st.spinner('Retrieving Surf Stats...'):
     try:
         s_id = Converter.to_steamID(text_input)
+        id64 = Converter.to_steamID64(text_input)
     except:
         st.exception(invalid_id)
         st.stop()
@@ -127,7 +128,7 @@ maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper
 df = pd.merge(df, maps_df, on='Map Name')
 
 # Start building the dashboard when scraping is complete
-draw_flag(player_name, player_country, s_id)
+draw_flag(player_name, player_country, id64)
 
 
 if int(player_rank) <= 100:
