@@ -1,5 +1,6 @@
-# Byte-compiled / optimized / DLL files
+tests/
 __pycache__/
+.streamlit
 test.py
 ranks.txt
 css/__pycache__/
