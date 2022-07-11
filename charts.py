@@ -9,31 +9,6 @@ import streamlit as st
 import base64
 
 
-ranks = {
-    'NEWBIE': 0,
-    'AMATEUR': 87,
-    'NOVICE': 604,
-    'APPRENTICE': 2154,
-    'CASUAL': 5170,
-    'REGULAR': 10340,
-    'ADVANCED': 21540,
-    'ADVANCED+': 38772,
-    'SEMI-ELITE': 58589,
-    'ELITE': 74960,
-    'VETERAN': 86160,
-    'SEMI-PRO': 107700,
-    'PRO': 137856,
-    'AMAZING': 189552,
-    'STUNNING': 215400,
-    'MASTER': 241248,
-    'WICKED': 267096,
-    'INSANE': 292944,
-    'RIDICULOUS': 323100,
-    'LEGEND': 353256,
-    'SURF GOD': 430800
-    }
-
-
 def draw_pie(df):
     options = {
         "tooltip": {"trigger": "item"},
@@ -118,6 +93,7 @@ def draw_line(df):
     }
     st_echarts(options=option, height="500px",)
 
+
 def players_bar():
     top_players = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/top_players.csv').drop(columns=['Unnamed: 0'])
     b = (
@@ -135,15 +111,30 @@ def players_bar():
     )
     st_pyecharts(b, height=480)
 
+
+countries = {
+    'Canada': 'ca',
+    'The United States': 'us',
+    'The United Kingdom': 'gb',
+    'Denmark': 'dk',
+    'Japan': 'jp',
+    'Russia': 'ru',
+    'Finland': 'fl',
+    'Australia': 'au',
+    'Norway': 'no',
+    'Germany': 'de',
+    'The Netherlands': 'nl',
+    'Sweden': 'se',
+    'Belgium': 'be',
+    'Hong Kong': 'hk',
+    'Poland': 'pl',
+}
+
+
 def draw_flag(player_name, player_country, id64):
-    if player_country == 'The United States':
-        LOGO_IMAGE = "./assets/flags/us.png"
-    elif 'anada' in player_country:             # Canada is scraped with a newline for some reason
-        LOGO_IMAGE = "./assets/flags/ca.png"
-    elif player_country == 'The United Kingdom':
-        LOGO_IMAGE = "./assets/flags/gb.png"
-    else:
-        LOGO_IMAGE = "./assets/flags/us.png"
+    for k,v in countries.items():
+        if k in player_country:
+            flag = f"./assets/flags/{v}.png"
     
     # Some css hacking with text animation
     st.markdown(
@@ -206,11 +197,36 @@ def draw_flag(player_name, player_country, id64):
             <p class="logo-text">
                 <a href="http://steamcommunity.com/profiles/{id64}">{player_name}</a>'s surf stats
             </p>
-            <img class="logo-img" title="Country" src="data:image/png;base64,{base64.b64encode(open(LOGO_IMAGE, "rb").read()).decode()}">
+            <img class="logo-img" title="Country" src="data:image/png;base64,{base64.b64encode(open(flag, "rb").read()).decode()}">
         </div>
         """,
         unsafe_allow_html=True
     )
+
+
+ranks = {
+    'NEWBIE': 0,
+    'AMATEUR': 87,
+    'NOVICE': 604,
+    'APPRENTICE': 2154,
+    'CASUAL': 5170,
+    'REGULAR': 10340,
+    'ADVANCED': 21540,
+    'ADVANCED+': 38772,
+    'SEMI-ELITE': 58589,
+    'ELITE': 74960,
+    'VETERAN': 86160,
+    'SEMI-PRO': 107700,
+    'PRO': 137856,
+    'AMAZING': 189552,
+    'STUNNING': 215400,
+    'MASTER': 241248,
+    'WICKED': 267096,
+    'INSANE': 292944,
+    'RIDICULOUS': 323100,
+    'LEGEND': 353256,
+    'SURF GOD': 430800
+    }
 
 
 # Loop through ranks until value greater than player points is found
