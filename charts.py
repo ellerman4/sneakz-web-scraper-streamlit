@@ -31,8 +31,8 @@ def draw_pie(df):
                 },
                 "labelLine": {"show": False},
                 "data": [
-                    {"value": df.shape[0], "name": "Maps Completed"},
-                    {"value": (944 - df.shape[0]), "name": "Maps Left"},
+                    {"value": df.shape[0], "name": "Maps Completed", "itemStyle": {"color": "#4173bf"}},
+                    {"value": (944 - df.shape[0]), "name": "Maps Left", "itemStyle": {"color": "#b06161"}},
                 ],
             }
         ],
@@ -41,7 +41,7 @@ def draw_pie(df):
         options=options, height="495px",
     )
 
-def draw_pie2(bonus_completion):
+def draw_bonus_pie(bonus_completion):
     bonus_df = pd.read_csv('./data/map_bonuses.csv')
 
     bonus_total = bonus_df['Bonuses'].sum()
@@ -69,8 +69,8 @@ def draw_pie2(bonus_completion):
                 },
                 "labelLine": {"show": False},
                 "data": [
-                    {"value": int(bonus_completion), "name": "Bonuses Completed", "itemStyle": {"color": "#b06161"}},
-                    {"value": int(bonus_left), "name": "Bonuses Left"},
+                    {"value": int(bonus_completion), "name": "Bonuses Completed", "itemStyle": {"color": "#4173bf"}},
+                    {"value": int(bonus_left), "name": "Bonuses Left", "itemStyle": {"color": "#b06161"}},
                 ],
             }
         ],

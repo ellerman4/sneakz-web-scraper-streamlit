@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank, draw_current_rank, draw_pie2
+from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank, draw_current_rank, draw_bonus_pie
 import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
@@ -43,6 +43,7 @@ st.markdown('''
         padding-right: 5rem;
         min-width: auto;
         max-width: initial;
+        top: 15px;
     }
     </style>''',
     unsafe_allow_html=True
@@ -194,11 +195,11 @@ with table_col:
 
 with chart_col:
     draw_bar(df)
-    draw_pie2(bonus_completion)
+    draw_bonus_pie(bonus_completion)
 
 
+# Display top 25 players bar chart under a markdown
 st.markdown('***')
-
 players_bar()
 
 # Create a profile report
