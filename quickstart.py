@@ -109,7 +109,7 @@ with st.spinner('Retrieving Surf Stats...'):
     result = [] # Blank list to be appended later
 
     # Iterate through all rows in the table, getting values for all rows
-    for i in range(len(map_names)):
+    for i,v in enumerate(map_names):
         temp_data = {'Map Name': map_names[i].text,
                     'Rank': rank[i].text,
                     'Personal Best': pb[i].text,
@@ -171,7 +171,7 @@ with stage_col:
                     style="cursor:pointer;
                             margin-left: -877px;
                             margin-top: 71px;",
-                    title="Stage Records">🥇{map_records} 🥈{bonus_records} 🥉{stage_records}</div>''',
+                    title="Records">🥇{map_records} 🥈{bonus_records} 🥉{stage_records}</div>''',
                 unsafe_allow_html=True)
 
 
