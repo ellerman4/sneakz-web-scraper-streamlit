@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank, draw_current_rank
+from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank, draw_current_rank, draw_pie2
 import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
@@ -28,7 +28,7 @@ conn = init_connection()
 cur = conn.cursor()
 
 # Load some custom css
-download_button_css()
+#download_button_css()
 button_css()
 
 
@@ -93,6 +93,7 @@ with st.spinner('Retrieving Surf Stats...'):
     points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text[8:]
     player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text[9:]
     player_rank = driver.find_element(By.XPATH, '//b').text[6:]
+    bonus_completion = driver.find_element(By.XPATH, '//table/tbody/tr[3]/td').text[19:]
 
     # Get player record data
     map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text[13:]
@@ -188,11 +189,17 @@ csv = convert_df(df)
 with table_col:
     st.download_button("Press to Download", csv, "file.csv", "text/csv", key='download-csv')
     draw_table(df)
-    players_bar()
+    st.markdown(f'''<br><br>''',unsafe_allow_html=True)
+    draw_pie(df)
 
 with chart_col:
     draw_bar(df)
-    draw_pie(df)
+    draw_pie2(bonus_completion)
+
+
+st.markdown('***')
+
+players_bar()
 
 # Create a profile report
 pr = df.profile_report()
