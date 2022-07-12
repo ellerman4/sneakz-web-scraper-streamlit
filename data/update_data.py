@@ -31,3 +31,32 @@ def update_maps():
 
     # Save the data
     data.to_csv('./data/maps.csv', index = False)
+
+
+
+def top_players():
+    driver = webdriver.Chrome(executable_path='C:\Program Files (x86)\chromedriver')
+    driver.get(f"https://snksrv.com/surfstats/?view=players")
+
+    player_name = driver.find_elements(By.XPATH, '//table/tbody/tr/td/a')
+    player_country = driver.find_elements(By.XPATH, '//table/tbody/tr/td[2]')
+    player_points = driver.find_elements(By.XPATH, '//table/tbody/tr/td[3]')
+    maps_completed = driver.find_elements(By.XPATH, '//table/tbody/tr/td[4]')
+
+
+    result = [] # Blank list to be appended later
+
+    # Iterate through all rows in the table, getting values for all rows
+    for i,v in enumerate(player_name):
+        temp_data = {'Player Name': player_name[i].text,
+                    'Player Country': player_country[i].text,
+                    'Points': player_points[i].text,
+                    'Maps Completed': maps_completed[i].text}
+        result.append(temp_data)
+
+    driver.close()
+
+    #Create dataframe from the result list
+    df = pd.DataFrame(result)
+    df = df.iloc[: , 0:]
+    df.to_csv('./data/top_players.csv', index = False)
