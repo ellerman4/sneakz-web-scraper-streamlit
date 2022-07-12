@@ -95,7 +95,7 @@ def draw_line(df):
 
 
 def players_bar():
-    top_players = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/top_players.csv').drop(columns=['Unnamed: 0'])
+    top_players = pd.read_csv('./data/top_players.csv').drop(columns=['Unnamed: 0'])
     b = (
         Bar()
         .add_xaxis(top_players['Player Name'].tolist())
