@@ -38,7 +38,45 @@ def draw_pie(df):
         ],
     }
     st_echarts(
-        options=options, height="475px",
+        options=options, height="495px",
+    )
+
+def draw_pie2(bonus_completion):
+    bonus_df = pd.read_csv('./data/map_bonuses.csv')
+
+    bonus_total = bonus_df['Bonuses'].sum()
+
+    bonus_left = bonus_total - int(bonus_completion)
+
+    options = {
+        "tooltip": {"trigger": "item"},
+        "legend": {"top": "1%", "left": "center",
+                "textStyle": { "color": "white"}},
+        "series": [
+            { 
+                "name": "maps_pie",
+                "type": "pie",
+                "radius": ["40%", "70%"],
+                "avoidLabelOverlap": False,
+                "itemStyle": {
+                    "borderRadius": 10,
+                    "borderColor": "#fff",
+                    "borderWidth": 2,
+                },
+                "label": {"show": False, "position": "center"},
+                "emphasis": {
+                    "label": {"show": True, "fontSize": "40", "fontWeight": "bold"}
+                },
+                "labelLine": {"show": False},
+                "data": [
+                    {"value": int(bonus_completion), "name": "Bonuses Completed", "itemStyle": {"color": "#b06161"}},
+                    {"value": int(bonus_left), "name": "Bonuses Left"},
+                ],
+            }
+        ],
+    }
+    st_echarts(
+        options=options, height="499px", key = 'test'
     )
 
 
