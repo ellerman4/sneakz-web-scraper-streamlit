@@ -141,7 +141,7 @@ df = pd.DataFrame(result)
 df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for accurate sorting/filtering
 
 # Read maps.csv with map name and map tier data
-maps_df = pd.read_csv('https://raw.githubusercontent.com/ellerman4/timed-scraper/master/data/maps.csv')
+maps_df = pd.read_csv('./data/maps.csv')
 
 # Merge player stats with map tier on Map Name column
 df = pd.merge(df, maps_df, on='Map Name')
