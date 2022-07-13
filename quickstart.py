@@ -86,7 +86,7 @@ with st.spinner('Retrieving Surf Stats...'):
         st.exception(invalid_id)
         st.stop()
     
-    driver = webdriver.Chrome(options=options, executable_path='chromedriver')
+    driver = webdriver.Chrome(options=options, executable_path='./chromedriver')
     driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
     # Get general player data
