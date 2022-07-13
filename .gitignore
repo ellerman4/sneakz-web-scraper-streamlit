@@ -4,3 +4,4 @@ __pycache__/
 test.py
 ranks.txt
 css/__pycache__/
+geckodriver.log
