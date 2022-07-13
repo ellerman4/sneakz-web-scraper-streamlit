@@ -74,7 +74,7 @@ start = timeit.default_timer()
 # Chromedriver options for faster scraping
 options = Options()
 options.add_argument("--headless")
-service = Service(GeckoDriverManager().install())
+#service = Service(GeckoDriverManager().install())
 
 
 # Initialize streamlit spinner animation while scraping data
@@ -86,7 +86,7 @@ with st.spinner('Retrieving Surf Stats...'):
         st.exception(invalid_id)
         st.stop()
     
-    driver = webdriver.Firefox(options=options, service=service,)
+    driver = webdriver.Firefox(options=options, executable_path=GeckoDriverManager().install())
     driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
     # Get general player data
