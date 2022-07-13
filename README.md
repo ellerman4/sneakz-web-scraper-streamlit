@@ -1,4 +1,4 @@
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ellerman4-surf-stats-dashboard-quickstart-ur277p.streamlitapp.com/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/ellerman4/surf-stats-dashboard/quickstart.py)
 # Overview
 Browser based web scraper for scraping [Sneakz](https://snksrv.com/surfstats/) surf data for a specified user.  
 Results are returned in a table with the option to download as csv.  
