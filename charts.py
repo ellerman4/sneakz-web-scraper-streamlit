@@ -117,20 +117,6 @@ def draw_bar(df):
     }
     st_echarts(options=options, height="515px")
 
-def draw_line(df):
-    tier1, tier2 = np.sum(df['Map Tier'] == 1), np.sum(df['Map Tier'] == 2)
-    tier3, tier4 = np.sum(df['Map Tier'] == 3), np.sum(df['Map Tier'] == 4)
-    tier5, tier6 = np.sum(df['Map Tier'] == 5), np.sum(df['Map Tier'] == 6)
-    option = {
-    "xAxis": {
-        "type": "category",
-        "data": ["Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6"],
-    },
-    "yAxis": {"type": "value"},
-    "series": [{"data": [int(tier1), int(tier2), int(tier3), int(tier4), int(tier5), int(tier6)], "type": "line"}],
-    }
-    st_echarts(options=option, height="500px",)
-
 
 def players_bar():
     top_players = pd.read_csv('./data/top_players.csv').drop(columns=['Unnamed: 0'])
