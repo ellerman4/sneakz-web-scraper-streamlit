@@ -50,7 +50,7 @@ def draw_bonus_pie(bonus_completion):
 
     options = {
         "tooltip": {"trigger": "item"},
-        "legend": {"top": "1%", "left": "center",
+        "legend": {"top": "0%", "left": "center",
                 "textStyle": { "color": "white"}},
         "series": [
             { 
@@ -76,7 +76,7 @@ def draw_bonus_pie(bonus_completion):
         ],
     }
     st_echarts(
-        options=options, height="499px", key = 'test'
+        options=options, height="495px"
     )
 
 
