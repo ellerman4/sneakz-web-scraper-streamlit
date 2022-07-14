@@ -4,10 +4,11 @@ from st_aggrid import AgGrid
 import numpy as np
 import pandas as pd
 from pyecharts.charts import Bar
+from pyecharts.faker import Faker
 import pyecharts.options as opts
 import streamlit as st
 import base64
-
+import random
 
 def draw_pie(df):
     options = {
@@ -119,17 +120,30 @@ def draw_bar(df):
 
 
 def players_bar():
+    range_color = ['#4173bf', '#7567b4', '#965a9f', '#aa4f85', '#b24a68', '#b04c4c']
+
     top_players = pd.read_csv('./data/top_players.csv').drop(columns=['Unnamed: 0'])
+
+    top_points = int(top_players['Points'].iloc[0])
+    bottom_points = int(top_players['Points'].iloc[-1])
+
     b = (
         Bar()
         .add_xaxis(top_players['Player Name'].tolist())
         .add_yaxis('Points', top_players['Points'].tolist())
+        .set_series_opts(label_opts=opts.LabelOpts(color='#ffffff'))
         .set_global_opts(
+            visualmap_opts=opts.VisualMapOpts(
+                min_=bottom_points,
+                max_=top_points,
+                range_color=range_color,
+                pos_top="80"),
             title_opts=opts.TitleOpts(
-                title="Top 25 players by points", subtitle="Points"
+                title="Top 25 players by points", subtitle="Points", title_link='https://snksrv.com/surfstats/?view=players',
+                title_textstyle_opts=opts.TextStyleOpts(color='#ffffff',font_size=20, font_family='monospace'),
             ),
             xaxis_opts=opts.AxisOpts(
-                axislabel_opts=opts.LabelOpts(rotate=-10)
+                axislabel_opts=opts.LabelOpts(is_show=True)
             ),
         )
     )
