@@ -215,13 +215,8 @@ with pie_col2:
 st.markdown('***')
 players_bar()
 
-@st.cache(allow_output_mutation=True, ttl=300, max_entries=2)
-def gen_profile_report(df, *report_args, **report_kwargs):
-    return df.profile_report(*report_args, **report_kwargs)
-
-
 # Create a profile report
-pr = gen_profile_report(df)
+pr = df.profile_report()
 
 # Create expander for pandas profile report
 with st.expander("See Pandas Profile Report"):
