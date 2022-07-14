@@ -4,7 +4,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank, draw_current_rank, draw_bonus_pie
 import Converter
-import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
 from css.custom_css import button_css, download_button_css
 import psycopg2
@@ -188,7 +187,7 @@ table_col, chart_col = st.columns(2)
 pie_col1, pie_col2 = st.columns(2)
 
 # Convert dataframe to csv
-@st.cache
+@st.cache(ttl=300, max_entries=2)
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
@@ -215,8 +214,13 @@ with pie_col2:
 st.markdown('***')
 players_bar()
 
+@st.cache(allow_output_mutation=True, ttl=300, max_entries=2)
+def gen_profile_report(df, *report_args, **report_kwargs):
+    return df.profile_report(*report_args, **report_kwargs)
+
+
 # Create a profile report
-pr = df.profile_report()
+pr = gen_profile_report(df)
 
 # Create expander for pandas profile report
 with st.expander("See Pandas Profile Report"):
