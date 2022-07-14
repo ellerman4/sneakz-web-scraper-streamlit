@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank, draw_current_rank, draw_bonus_pie
 import Converter
+import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
 from css.custom_css import button_css, download_button_css
 import psycopg2
