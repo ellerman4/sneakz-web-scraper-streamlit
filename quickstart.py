@@ -23,8 +23,8 @@ st.set_page_config(layout="wide")
 options = Options()
 options.add_argument("--headless")
 
-# Chromedriver options for faster scraping
-@st.cache
+# Cache geckodriver service to not install on every visit
+@st.cache(allow_output_mutation=True)
 def set_service():
     service = Service(GeckoDriverManager().install())
     return service
