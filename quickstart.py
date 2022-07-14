@@ -177,8 +177,11 @@ with stage_col:
                 unsafe_allow_html=True)
 
 
-# Create a column layout for plots
+# Create a column layout table and bar chart
 table_col, chart_col = st.columns(2)
+
+# Create a column for pie charts
+pie_col1, pie_col2 = st.columns(2)
 
 # Convert dataframe to csv
 @st.cache
@@ -187,14 +190,20 @@ def convert_df(df):
 
 csv = convert_df(df)
 
+# Draw table and download button in table column
 with table_col:
     st.download_button("Press to Download", csv, "file.csv", "text/csv", key='download-csv')
     draw_table(df)
-    st.markdown(f'''<br><br>''',unsafe_allow_html=True)
-    draw_pie(df)
 
 with chart_col:
     draw_bar(df)
+
+
+# Pie charts in dedicated columns under table/bar chart columns
+with pie_col1:
+    draw_pie(df)
+
+with pie_col2:
     draw_bonus_pie(bonus_completion)
 
 
