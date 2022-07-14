@@ -20,6 +20,15 @@ invalid_id = RuntimeError('You may have entered an invalid SteamID')
 
 st.set_page_config(layout="wide")
 
+options = Options()
+options.add_argument("--headless")
+
+# Chromedriver options for faster scraping
+@st.cache
+def set_service():
+    service = Service(GeckoDriverManager().install())
+    return service
+
 
 # Initialize connection to database
 @st.experimental_singleton
@@ -71,11 +80,6 @@ if not submit_button:
 # Start a timer to log scrape time
 start = timeit.default_timer()
 
-# Chromedriver options for faster scraping
-options = Options()
-options.add_argument("--headless")
-service = Service(GeckoDriverManager().install())
-
 
 # Initialize streamlit spinner animation while scraping data
 with st.spinner('Retrieving Surf Stats...'):
@@ -86,7 +90,7 @@ with st.spinner('Retrieving Surf Stats...'):
         st.exception(invalid_id)
         st.stop()
     
-    driver = webdriver.Firefox(options=options, service=service)
+    driver = webdriver.Firefox(options=options, service=set_service())
     driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
 
     # Get general player data
