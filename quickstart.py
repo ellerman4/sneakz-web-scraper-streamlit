@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-from selenium import webdriver
-from selenium.webdriver.common.by import By
 from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_rank, draw_current_rank, draw_bonus_pie
 import Converter
 import pandas_profiling
@@ -13,21 +11,13 @@ import timeit
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
 from webdriver_manager.firefox import GeckoDriverManager
-
+from bs4 import BeautifulSoup
+import requests
 
 # Create a runtime error if user enters an invalid SteamID
 invalid_id = RuntimeError('You may have entered an invalid SteamID')
 
 st.set_page_config(layout="wide")
-
-options = Options()
-options.add_argument("--headless")
-
-# Cache geckodriver service to not install on every visit
-@st.cache(allow_output_mutation=True)
-def set_service():
-    service = Service(GeckoDriverManager().install())
-    return service
 
 
 # Initialize connection to database
@@ -90,40 +80,25 @@ with st.spinner('Retrieving Surf Stats...'):
         st.exception(invalid_id)
         st.stop()
     
-    driver = webdriver.Firefox(options=options, service=set_service())
-    driver.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}")
-
+    data = requests.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}").text
+    soup = BeautifulSoup(data, 'html.parser')
     # Get general player data
-    player_name = driver.find_element(By.XPATH, '//h2/a').text
-    points = driver.find_element(By.XPATH, '//table/tbody/tr/td').text[8:]
-    player_country = driver.find_element(By.XPATH, '//table/tbody/tr/td[2]').text[9:]
-    player_rank = driver.find_element(By.XPATH, '//b').text[6:]
-    bonus_completion = driver.find_element(By.XPATH, '//table/tbody/tr[3]/td').text[19:]
+    player_name = soup.find('h2').text
+    points = soup.find('td').text[8:]
+    player_country = soup.find('b', string="Country").next_sibling.text[2:]
+    player_rank = soup.find('b').text[6:]
+    bonus_completion = soup.find('b', string="Bonus Completions").next_sibling.text[2:]
 
-    # Get player record data
-    map_records = driver.find_element(By.XPATH, '//tbody/tr[2]/td[2]').text[13:]
-    bonus_records = driver.find_element(By.XPATH, '//tbody/tr[3]/td[2]').text[15:]
-    stage_records = driver.find_element(By.XPATH, '//tbody/tr[4]/td[2]').text[15:]
+    map_records = soup.find('b', string="Map Records").next_sibling.text[2:]
+    bonus_records = soup.find('b', string="Bonus Records").next_sibling.text[2:]
+    stage_records = soup.find('b', string="Stage Records").next_sibling.text[2:]
 
     # Get player map time data
-    map_names = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td/a')
-    rank = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[2]')
-    pb = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[3]')
-    date = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[4]')
-    start_speed = driver.find_elements(By.XPATH, '//table[3]/tbody/tr/td[5]')
 
-    result = [] # Blank list to be appended later
 
-    # Iterate through all rows in the table, getting values for all rows
-    for i,v in enumerate(map_names):
-        temp_data = {'Map Name': map_names[i].text,
-                    'Rank': rank[i].text,
-                    'Personal Best': pb[i].text,
-                    'Date': date[i].text,
-                    'Start Speed': start_speed[i].text}
-        result.append(temp_data)
+    table = soup.find_all('table')
 
-    driver.close()
+    df = pd.read_html(str(table))[2]
 
 # Stop the timer and calculate execution time
 stop = timeit.default_timer()
@@ -143,7 +118,7 @@ conn.commit()
 
 
 #Create dataframe from the result list
-df = pd.DataFrame(result)
+#df = pd.DataFrame(result)
 df['Rank'] = pd.to_numeric(df['Rank'])  # Convert rank column to numeric for accurate sorting/filtering
 
 # Read maps.csv with map name and map tier data
