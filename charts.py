@@ -4,11 +4,9 @@ from st_aggrid import AgGrid
 import numpy as np
 import pandas as pd
 from pyecharts.charts import Bar
-from pyecharts.faker import Faker
 import pyecharts.options as opts
 import streamlit as st
 import base64
-import random
 
 def draw_pie(df):
     options = {

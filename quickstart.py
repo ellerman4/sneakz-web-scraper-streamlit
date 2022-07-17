@@ -8,9 +8,6 @@ from css.custom_css import button_css, download_button_css
 import psycopg2
 from datetime import datetime
 import timeit
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
-from webdriver_manager.firefox import GeckoDriverManager
 from bs4 import BeautifulSoup
 import requests
 
