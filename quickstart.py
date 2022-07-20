@@ -4,7 +4,7 @@ from charts import draw_pie, draw_table, draw_bar, draw_flag, players_bar, draw_
 import Converter
 import pandas_profiling
 from streamlit_pandas_profiling import st_profile_report
-from css.custom_css import button_css, download_button_css
+from css.custom_css import button_css
 import psycopg2
 from datetime import datetime
 import timeit
@@ -27,7 +27,6 @@ conn = init_connection()
 cur = conn.cursor()
 
 # Load some custom css
-#download_button_css()
 button_css()
 
 
@@ -79,6 +78,7 @@ with st.spinner('Retrieving Surf Stats...'):
     
     data = requests.get(f"https://snksrv.com/surfstats/?view=profile&id={s_id}").text
     soup = BeautifulSoup(data, 'html.parser')
+
     # Get general player data
     player_name = soup.find('h2').text
     points = soup.find('td').text[8:]
@@ -90,11 +90,8 @@ with st.spinner('Retrieving Surf Stats...'):
     bonus_records = soup.find('b', string="Bonus Records").next_sibling.text[2:]
     stage_records = soup.find('b', string="Stage Records").next_sibling.text[2:]
 
-    # Get player map time data
-
-
+    # Get player map time data with pandas built in read_html function
     table = soup.find_all('table')
-
     df = pd.read_html(str(table))[2]
 
 # Stop the timer and calculate execution time
@@ -137,13 +134,14 @@ else:
 # Create columns for records
 map_col, bonus_col, stage_col= st.columns(3)
 
-# Include tooltip info for records via inline html
+
 with map_col:
     draw_current_rank(points)
 
 with bonus_col:
     draw_rank(points)
 
+# Include tooltip info for records via inline html
 with stage_col:
     st.markdown(f'''<div class="tooltip",
                     style="cursor:pointer;
