@@ -10,6 +10,7 @@ from datetime import datetime
 import timeit
 from bs4 import BeautifulSoup
 import requests
+from css.streamlit_download_button import download_button
 
 # Create a runtime error if user enters an invalid SteamID
 invalid_id = RuntimeError('You may have entered an invalid SteamID')
@@ -162,13 +163,16 @@ pie_col1, pie_col2 = st.columns(2)
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
-csv = convert_df(df)
 
 # Draw table and download button in table column
 with table_col:
-    st.download_button("Press to Download", csv, "file.csv", "text/csv", key='download-csv')
+    st.markdown(
+        download_button(convert_df(df), "surf_stats.csv", "Press to Download"),     # Load custom download button with a streamlit markdown (re-run workaround)
+        unsafe_allow_html=True)
+
     draw_table(df)
 
+# Draw map tier bar chart
 with chart_col:
     draw_bar(df)
 
@@ -189,10 +193,10 @@ players_bar()
 pr = df.profile_report()
 
 # Create expander for pandas profile report
-with st.expander("See Pandas Profile Report"):
+with st.expander("See Profile Report"):
     st_profile_report(pr, key='profile-report')
-    export=pr.to_html()
-    st.download_button(label="Download Full Report", data=export, file_name='report.html')
+
+    st.download_button(label="Download Full Report", data=pr.to_html(), file_name='report.html')
 
 # Write execution time
 st.write(execution_time)
