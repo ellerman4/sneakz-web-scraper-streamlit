@@ -4,18 +4,23 @@ Browser based web scraper for scraping [Sneakz](https://snksrv.com/surfstats/) s
 Results are returned in a table with the option to download as csv.  
 Steam ID can be any type of steam id, as it converts to a legacy steam id.  
 
-- Streamlit
+## Requirements
 ```python
-pip install Streamlit
+beautifulsoup4==4.11.1
+numpy==1.22.4
+pandas==1.4.2
+pandas_profiling==3.2.0
+Pillow==9.2.0
+psycopg2_binary==2.9.3
+pyecharts==1.9.1
+requests==2.28.0
+streamlit==1.10.0
+streamlit_echarts==0.4.0
+streamlit_pandas_profiling==0.1.3
+streamlit-aggrid==0.2.3
+lxml==4.9.1
 ```
-- Pandas
-```python
-pip install Pandas
-```
-- Selenium
-```python
-pip install Selenium
-```
+
 
 
 ## Usage
